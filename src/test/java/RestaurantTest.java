@@ -1,24 +1,43 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RestaurantTest {
-    Restaurant restaurant;
-    //REFACTOR ALL THE REPEATED LINES OF CODE
+    RestaurantService service;
+    private final PrintStream standardOut = System.out;
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
-    //>>>>>>>>>>>>>>>>>>>>>>>>>OPEN/CLOSED<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    //-------FOR THE 2 TESTS BELOW, YOU MAY USE THE CONCEPT OF MOCKING, IF YOU RUN INTO ANY TROUBLE
-    @Test
-    public void is_restaurant_open_should_return_true_if_time_is_between_opening_and_closing_time(){
-        //WRITE UNIT TEST CASE HERE
+    @BeforeEach
+    public void init() {
+        restaurant=null;
+        service = new RestaurantService();
+        System.setOut(new PrintStream(outputStreamCaptor));
     }
 
+    Restaurant restaurant;
+
     @Test
-    public void is_restaurant_open_should_return_false_if_time_is_outside_opening_and_closing_time(){
+    public void is_restaurant_open_should_return_true_if_time_is_between_opening_and_closing_time() {
+        LocalTime openingTime = LocalTime.parse("10:30:00");
+        LocalTime closingTime = LocalTime.parse("22:00:00");
+        service.addRestaurant("Chefs made", "Noida", openingTime, closingTime);
+        restaurant = service.getRestaurants().get(0);
+        assertTrue(restaurant.isRestaurantOpen(LocalTime.now()), "");
+    }
+    @Test
+    public void is_restaurant_open_should_return_false_if_time_is_outside_opening_and_closing_time() {
         //WRITE UNIT TEST CASE HERE
+        LocalTime openingTime = LocalTime.parse("10:30:00");
+        LocalTime closingTime = LocalTime.parse("22:00:00");
+        service.addRestaurant("Chefs made", "Noida", openingTime, closingTime);
+        LocalTime localTime2 = LocalTime.of(23, 0);
+        restaurant = service.getRestaurants().get(0);
+        assertFalse(restaurant.isRestaurantOpen(localTime2), "");
 
     }
 
