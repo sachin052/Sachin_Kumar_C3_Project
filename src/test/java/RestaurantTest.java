@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -77,8 +78,41 @@ class RestaurantTest {
         restaurant.addToMenu("Sweet corn soup",119);
         restaurant.addToMenu("Vegetable lasagne", 269);
 
-        assertThrows(itemNotFoundException.class,
-                ()->restaurant.removeFromMenu("French fries"));
+        assertThrows(itemNotFoundException.class, ()->restaurant.removeFromMenu("French fries"));
     }
+
+    @Test
+    public void check_order_value_must_be_zero_if_no_item_is_ordered() {
+        LocalTime openingTime = LocalTime.parse("10:30:00");
+        LocalTime closingTime = LocalTime.parse("22:00:00");
+        restaurant =new Restaurant("Amelie's cafe","Chennai",openingTime,closingTime);
+        restaurant.addToMenu("Sweet corn soup",119);
+        restaurant.addToMenu("Vegetable lasagne", 269);
+
+        assertThrows(itemNotFoundException.class, ()->restaurant.removeFromMenu("French fries"));
+    }
+
+    @Test
+    public void throw_exception_if_there_is_no_menu_items() {
+        LocalTime openingTime = LocalTime.parse("10:30:00");
+        LocalTime closingTime = LocalTime.parse("22:00:00");
+        restaurant =new Restaurant("Amelie's cafe","Chennai",openingTime,closingTime);
+        ArrayList<String> items=new ArrayList<>();
+        items.add("Sweet corn soup");
+        assertThrows(noMenuFoundException.class,()->restaurant.getItemsByName(items));
+    }
+
+    @Test
+    public void throw_exception_if_there_is_no_item_selected_from_menu() {
+        LocalTime openingTime = LocalTime.parse("10:30:00");
+        LocalTime closingTime = LocalTime.parse("22:00:00");
+        restaurant =new Restaurant("Amelie's cafe","Chennai",openingTime,closingTime);
+        restaurant.addToMenu("Sweet corn soup",119);
+        restaurant.addToMenu("Vegetable lasagne", 269);
+        ArrayList<String> items=new ArrayList<>();
+        assertThrows(noMenuItemSelectedException.class,()->restaurant.getItemsByName(items));
+    }
+
+
     //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }

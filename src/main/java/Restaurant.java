@@ -63,4 +63,19 @@ public class Restaurant {
         return name;
     }
 
+    public int getOrderTotal(List<String> items)  {
+        return 0;
+    }
+
+     List<Item> getItemsByName(List<String> items) throws noMenuFoundException, noMenuItemSelectedException {
+        ArrayList<Item> list = new ArrayList<>();
+        if(items.isEmpty()) throw new noMenuItemSelectedException("No Item Selected");
+        for (Item menu : getMenu()) {
+            if(items.contains(menu.getName())){
+                list.add(menu);
+            }
+        }
+        return list;
+    }
+
 }
