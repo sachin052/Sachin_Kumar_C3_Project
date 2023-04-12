@@ -5,6 +5,11 @@ import java.util.List;
 
 public class Restaurant {
     private String name;
+
+    public String getLocation() {
+        return location;
+    }
+
     private String location;
     public LocalTime openingTime;
     public LocalTime closingTime;
@@ -50,12 +55,14 @@ public class Restaurant {
 
         menu.remove(itemToBeRemoved);
     }
-    public void displayDetails() throws noMenuFoundException {
-        System.out.println("Restaurant:"+ name + "\n"
-                +"Location:"+ location + "\n"
-                +"Opening time:"+ openingTime +"\n"
-                +"Closing time:"+ closingTime +"\n"
-                +"Menu:"+"\n"+getMenu());
+    public String displayDetails() throws noMenuFoundException {
+        String printStatement = "Restaurant:" + name + "\n"
+                + "Location:" + location + "\n"
+                + "Opening time:" + openingTime + "\n"
+                + "Closing time:" + closingTime + "\n"
+                + "Menu:" + "\n" + getMenu();
+        System.out.println(printStatement);
+        return printStatement;
 
     }
 
@@ -63,8 +70,17 @@ public class Restaurant {
         return name;
     }
 
-    public int getOrderTotal(List<String> items)  {
-        return 0;
+    public int getOrderTotal(List<String> items) throws noMenuItemSelectedException, noMenuFoundException {
+        int orderTotal = 0;
+        if (items.isEmpty()) return orderTotal;
+        else {
+            List<Item> allItems = getItemsByName(items);
+            if (allItems.isEmpty()) return orderTotal;
+            for (Item item : allItems) {
+                orderTotal += item.getPrice();
+            }
+        }
+        return orderTotal;
     }
 
      List<Item> getItemsByName(List<String> items) throws noMenuFoundException, noMenuItemSelectedException {
